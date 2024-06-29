@@ -88,7 +88,7 @@ class AntiChessGame extends Component {
   // Check if the game is over (no pieces left for one color)
   checkGameOver = () => {
     const { piecesCount, player1Wins, player2Wins,black,white } = this.state;
-    let newPlayer1Wins, newPlayer2Wins,no;
+    let newPlayer1Wins=player1Wins, newPlayer2Wins=player2Wins,no;
     if (piecesCount.w === 1 || piecesCount.b === 1) {
       const winner = piecesCount.w === 1 ? 'Black' : 'White'; // Determine the winner
       if (winner==='Black'){
@@ -121,7 +121,7 @@ class AntiChessGame extends Component {
   // Handle quitting the current game round
   handleQuit = () => {
     const { turn, player1Wins, player2Wins, black,white } = this.state;
-    let newPlayer1Wins, newPlayer2Wins,no;
+    let newPlayer1Wins=player1Wins, newPlayer2Wins=player2Wins,no;
 
     const winner = turn === 'w' ? 'Black' : 'White'; // Determine winner (opposite of current turn)
     if (winner==='Black'){
