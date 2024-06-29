@@ -10,8 +10,9 @@ Welcome to the AntiChess game, a variant of chess where the objective is to lose
 To get started with the AntiChess game, clone the repository and install the dependencies:
 
 ```
-git clone https://github.com/yourusername/antichess-game.git
+git clone link-of-this-project
 cd antichess-game
+npm install
 ```
 
 # Usage
