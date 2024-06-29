@@ -3,6 +3,7 @@ import { Chessboard } from 'react-chessboard'; // Importing the Chessboard compo
 import AntiChess from './Antilogic'; // Importing the AntiChess class
 import Header from './Header';
 import Footer from './Footer';
+import './App.css';
 class AntiChessGame extends Component {
   constructor(props) {
     super(props);
@@ -12,13 +13,13 @@ class AntiChessGame extends Component {
       fen: 'start', // FEN notation for the starting position
       turn: 'w', // Initial turn (white starts first)
       orientation: 'white', // Board orientation (white at the bottom)
-      player1Wins: 0, // Player 1 (White) wins counter
-      player2Wins: 0, // Player 2 (Black) wins counter
+      player1Wins: 0, // Player 1 wins counter
+      player2Wins: 0, // Player 2  wins counter
       winner: null, // Winner of the current game round
       history: [], // Array to store move history
-      piecesCount: { w: 16, b: 16 }, 
-      black: 2,
-      white: 1// Initial count of pieces for each color
+      piecesCount: { w: 16, b: 16 }, // Initial count of pieces for each color
+      black: 2,  // initial player no. with black 
+      white: 1  //initial player no. with white
     };
   }
 
@@ -86,40 +87,67 @@ class AntiChessGame extends Component {
 
   // Check if the game is over (no pieces left for one color)
   checkGameOver = () => {
-    const { piecesCount, player1Wins, player2Wins } = this.state;
-    if (piecesCount.w === 0 || piecesCount.b === 0) {
-      const winner = piecesCount.w === 0 ? 'Black' : 'White'; // Determine the winner
-      const newPlayer1Wins = winner === 'White' ? player1Wins + 1 : player1Wins; // Increment winner's win count
-      const newPlayer2Wins = winner === 'Black' ? player2Wins + 1 : player2Wins; // Increment loser's win count
+    const { piecesCount, player1Wins, player2Wins,black,white } = this.state;
+    let newPlayer1Wins, newPlayer2Wins,no;
+    if (piecesCount.w === 1 || piecesCount.b === 1) {
+      const winner = piecesCount.w === 1 ? 'Black' : 'White'; // Determine the winner
+      if (winner==='Black'){
+         no=this.state.black;
+        if (no===1)
+           newPlayer1Wins = player1Wins + 1 ;// Increment winner's win count
+        else
+        newPlayer2Wins = player2Wins + 1;
+      }
+      else{   no=this.state.white;
+        if (no===1)
+           newPlayer1Wins = player1Wins + 1 ;// Increment winner's win count
+        else
+        newPlayer2Wins = player2Wins + 1;
 
+      }
+      alert("Player No. "+no+" wins in "+winner);
       // Update state with winner and win counts
       this.setState({
-        winner,
+        winner:winner,
         player1Wins: newPlayer1Wins,
         player2Wins: newPlayer2Wins,
+        black: white,
+        white:black
       });
+      this.resetGame(); //reset the game state
     }
   };
 
   // Handle quitting the current game round
   handleQuit = () => {
-    const { turn, player1Wins, player2Wins } = this.state;
-    const winner = turn === 'w' ? 'Black' : 'White'; // Determine winner (opposite of current turn)
-    const newPlayer1Wins = winner === 'White' ? player1Wins + 1 : player1Wins; // Increment winner's win count
-    const newPlayer2Wins = winner === 'Black' ? player2Wins + 1 : player2Wins; // Increment loser's win count
+    const { turn, player1Wins, player2Wins, black,white } = this.state;
+    let newPlayer1Wins, newPlayer2Wins,no;
 
-    // Reset game state to start a new round
-    this.setState({
-      winner,
+    const winner = turn === 'w' ? 'Black' : 'White'; // Determine winner (opposite of current turn)
+    if (winner==='Black'){
+       no=this.state.black;
+      if (no===1)
+         newPlayer1Wins = player1Wins + 1 ;// Increment winner's win count
+      else
+      newPlayer2Wins = player2Wins + 1;
+    }
+    else{   no=this.state.white;
+      if (no===1)
+         newPlayer1Wins = player1Wins + 1 ;// Increment winner's win count
+      else
+      newPlayer2Wins = player2Wins + 1;
+
+    }
+    alert("Player No. "+no+" wins in "+winner);
+     // Update state with winner and win counts
+     this.setState({
+      winner:winner,
       player1Wins: newPlayer1Wins,
       player2Wins: newPlayer2Wins,
-      game: new AntiChess(),
-      fen: 'start',
-      turn: 'w',
-      orientation: 'white',
-      history: [],
-      piecesCount: { w: 16, b: 16 },
+      black: white,
+      white:black
     });
+    this.resetGame(); //reset the game state
   };
 
   // Reset the entire game state
@@ -139,25 +167,31 @@ class AntiChessGame extends Component {
     const { fen, turn, orientation, winner, player1Wins, player2Wins, history, piecesCount } = this.state;
 
     return (
-      <div>
+      <div className="container">
         <Header turn={turn === 'w' ? 'White' : 'Black'}/>
         {/* Render the Chessboard component */}
-        <Chessboard
+        <div className="game-area"> 
+          <Chessboard
           position={fen}
           onPieceDrop={this.onDrop}
           boardOrientation={orientation}
         />
-        <div>
-          {/* Display current turn, wins, remaining pieces, and winner */}
+        </div>
+       
+        <div className="info-panel">
+          {/* Display current turn, wins, remaining pieces */}
           <p>Current Turn: {turn === 'w' ? 'White' : 'Black'}</p>
-          <p>Player 1 (White) Wins: {player1Wins}</p>
-          <p>Player 2 (Black) Wins: {player2Wins}</p>
+          <p>Player 1  Wins: {player1Wins}</p>
+          <p>Player 2  Wins: {player2Wins}</p>
+          <p> Current White: Player no. {this.state.white} </p>
+          <p> Current Black: Player no. {this.state.black} </p>
+
           <p>White Pieces Left: {piecesCount.w}</p>
           <p>Black Pieces Left: {piecesCount.b}</p>
-          {winner && <p>Winner: {winner}</p>} {/* Display winner if game is over */}
-          {/* Buttons for quitting, resetting, and move history */}
-          <button onClick={this.handleQuit}>Quit</button>
-          <button onClick={this.resetGame}>Reset</button>
+          
+          {/* Buttons for quitting, resetting */}
+          <button className="button" onClick={this.handleQuit}>Quit</button>
+          <button className="button" onClick={this.resetGame}>Reset</button>
           <div>
             <h2>Move History</h2>
             <ol>
