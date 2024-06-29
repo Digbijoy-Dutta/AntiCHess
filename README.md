@@ -11,7 +11,7 @@ To get started with the AntiChess game, clone the repository and install the dep
 
 ```
 git clone link-of-this-project
-cd antichess-game
+cd AntiCHess
 npm install
 ```
 
